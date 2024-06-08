@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://i.pinimg.com/564x/03/3d/d1/033dd153d703803345a0e48e508ece5d.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: white;
+        }
+
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none; /* Remove card borders */
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: #354c51;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background-color: #9dd690;
+            border-color: #9dd690;
+        }
+
+        .btn-danger {
+            background-color: #d5838a;
+            border-color: #d5838a;
+        }
+
+        .btn-info {
+            background-color: #7fc1c8;
+            border-color: #7fc1c8;
+        }
+
+        .btn-add-patient {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            background-color: #a8bccf;
+            border-color: #7fc1c8;
+            color: white;
+            padding: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+    <title>Patients</title>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./doctors">Doctors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Patients</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="content container">
+    <h1>Patients</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Login</th>
+            <th>Role</th>
+            <th>Address</th>
+            <th>Date Added</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over patients and display them -->
+        <tr th:each="patient, stat : ${patients}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${patient.nom}"></td>
+            <td th:text="${patient.login}"></td>
+            <td th:text="${patient.role}"></td>
+            <td th:text="${patient.adresse.rue + ', ' + patient.adresse.ville + ', ' + patient.adresse.pays + ', ' + patient.adresse.codePostal}"></td>
+            <td th:text="${patient.dateDAjout}"></td>
+            <td>
+                <!-- Edit button -->
+                <a th:href="@{/edit/{id}(id=${patient.id})}" class="btn btn-primary">Edit</a>
+                <!-- Delete button -->
+                <a th:href="@{/delete/{id}(id=${patient.id})}" class="btn btn-danger">Delete</a>
+                <!-- Conditionally display the "View Medical Record" button -->
+                <a th:if="${patient.dossierMedicale != null}" th:href="@{/medicalRecord/view/{id}(id=${patient.dossierMedicale.idDM})}" class="btn btn-info">Dossier Medical</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Ajouter nouveau Patient</h2>
+    <form th:action="@{/patients/add}" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Personal Information</h5>
+                        <div class="form-group">
+                            <label for="nom">Nom:</label>
+                            <input type="text" class="form-control" id="nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role:</label>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="ROLE_PATIENT">Patient</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sexe">Sexe:</label>
+                            <select class="form-control" id="sexe" name="sexe" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cin">CIN:</label>
+                            <input type="text" class="form-control" id="cin" name="cin" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Additional Information</h5>
+                        <div class="form-group">
+                            <label for="assurance">Assurance:</label>
+                            <input type="text" class="form-control" id="assurance" name="assurance" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rue">Rue:</label>
+                            <input type="text" class="form-control" id="rue" name="adresse.rue" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ville">Ville:</label>
+                            <input type="text" class="form-control" id="ville" name="adresse.ville" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pays">Pays:</label>
+                            <input type="text" class="form-control" id="pays" name="adresse.pays" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateDAjout">Date d'Ajout:</label>
+                            <input type="date" class="form-control" id="dateDAjout" name="dateDAjout" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-add-patient">Add Patient</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

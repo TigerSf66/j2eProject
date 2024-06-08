@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        .invoice {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            width: 70%;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00aaff;
+            padding-bottom: 10px;
+        }
+
+        .invoice-header h1 {
+            margin: 0;
+            color: #00aaff;
+        }
+
+        .invoice-details {
+            margin-bottom: 20px;
+        }
+
+        .invoice-details p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .invoice-table th {
+            background-color: #00aaff;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .invoice-table td {
+            font-size: 14px;
+        }
+
+        .invoice-total {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .return-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .return-btn a {
+            padding: 12px 24px;
+            background-color: #00aaff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .return-btn a:hover {
+            background-color: #0077cc;
+        }
+
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="invoice">
+    <div class="logo">
+        <img src="/images/pay.gif" alt="Logo">
+    </div>
+    <div class="invoice-header">
+        <h1>Facture</h1>
+    </div>
+    <div class="invoice-details">
+        <p><strong>Patient:</strong> John Doe</p>
+        <p><strong>Date:</strong> 2024-06-06</p>
+    </div>
+    <table class="invoice-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Rest to Pay</th>
+            <th>State</th>
+            <th>Amount Paid</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${situation.id}"></td>
+            <td th:text="${situation.date}"></td>
+            <td th:text="${situation.resteAPayer}"></td>
+            <td th:text="${situation.etat}"></td>
+            <td th:text="${situation.montantPaye}"></td>
+            <td th:text="${situation.total}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="invoice-total">
+        <p><strong>Total à Payer:</strong> <span th:text="${situation.resteAPayer}"></span></p>
+    </div>
+    <div class="return-btn">
+        <a href="#" onclick="window.history.back()">Retour</a>
+    </div>
+</div>
+</body>
+</html>

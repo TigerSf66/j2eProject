@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url(https://i.pinimg.com/564x/03/3d/d1/033dd153d703803345a0e48e508ece5d.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #2c3e50;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ecf0f1;
+        }
+
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #e74c3c;
+        }
+
+        .content {
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .btn-info {
+            background-color: #8e44ad;
+            border-color: #8e44ad;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Doctors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./patients">Patients</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="content container">
+    <h1>Doctor List</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Specialty</th>
+            <th>Availability</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doctor : ${doctors}">
+            <td th:text="${doctor.id}"></td>
+            <td th:text="${doctor.nom}"></td>
+            <td th:text="${doctor.specialite}"></td>
+            <td th:text="${doctor.disponabilite}"></td>
+            <td>
+                <a th:href="@{/edit-doctor/{id}(id=${doctor.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/delete-doctor/{id}(id=${doctor.id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="container mt-5">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
+            Add Doctor
+        </button>
+
+        <div class="modal fade" id="addDoctorModal" tabindex="-1" aria-labelledby="addDoctorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDoctorModalLabel">Add Doctor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addDoctorForm">
+                            <div class="mb-3">
+                                <label for="doctorName" class="form-label">Doctor Name</label>
+                                <input type="text" class="form-control" id="doctorName" name="doctorName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="salaireDeBase" class="form-label">Base Salary</label>
+                                <input type="number" class="form-control" id="salaireDeBase" name="salaireDeBase" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="specialty" class="form-label">Specialty</label>
+                                <select class="form-control" id="specialty" name="specialty">
+                                    <option value="Endodontie-Chirurgie dentaire">Endodontie-Chirurgie dentaire</option>
+                                    <option value="Prothèse">Prothèse</option>
+                                    <option value="Orthodontie">Orthodontie</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="disponabilite" class="form-label">Availability</label>
+                                <input type="text" class="form-control" id="disponabilite" name="disponabilite">
+                            </div>
+                            <div class="mb-3">
+                                <label for="assurance" class="form-label">Assurance</label>
+                                <input type="text" class="form-control" id="assurance" name="assurance">
+                            </div>
+                            <div class="mb-3">
+                                <label for="statusActuel" class="form-label">Current Status</label>
+                                <input type="text" class="form-control" id="statusActuel" name="statusActuel" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Doctor</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#addDoctorForm').submit(function(e) {
+                e.preventDefault();
+                let doctorData = {
+                    nom: $('#doctorName').val(),
+                    login: $('#doctorName').val(), // Use separate field for login if needed
+                    motDePass: "password", // Consider handling password securely
+                    salaireDeBase: $('#salaireDeBase').val(),
+                    specialite: $('#specialty').val(),
+                    disponabilite: $('#disponabilite').val(),
+                    assurance: $('#assurance').val(),
+                    statusActuel: $('#statusActuel').val()
+                };
+
+                // Send the data to the server
+                $.ajax({
+                    type: "POST",
+                    url: "/add-doctor",
+                    contentType: "application/json",
+                    data: JSON.stringify(doctorData),
+                    success: function(response) {
+                        $('#addDoctorModal').modal('hide');
+                        location.reload(); // Reload to update the doctor list
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error adding doctor:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>
